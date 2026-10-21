@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>La suzuran お客様感謝ガチャ</title>
+<style>
+:root{--burgundy:#762b3e;--deep:#521c30;--gold:#cda977;--ink:#563840;--line:#eadccc}*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 10%,#fff,#fff6ee 56%,#f9e9e5);color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}
+.wrap{max-width:700px;margin:auto;padding:24px 15px 60px}.hidden{display:none!important}
+.card{background:#fffcf8ee;border:1px solid var(--line);border-radius:23px;padding:20px;margin:15px 0;box-shadow:0 12px 35px #5b23300d}
+.brand{text-align:center;padding:9px 0}.brand .logo{font-family:Georgia,serif;letter-spacing:.22em;color:#a7835c;font-size:15px}
+.brand h1{font-size:clamp(24px,5vw,36px);color:var(--burgundy);margin:10px 0}.brand p{font-size:12px;color:#9a7f7d}
+#publicTitle{text-align:center;color:var(--burgundy);font-size:clamp(18px,4.8vw,26px);margin:4px auto 8px}
+.machine-wrap{max-width:390px;margin:auto;position:relative}.machine-image{display:block;width:100%;height:auto;filter:drop-shadow(0 14px 18px #662b2820);border-radius:22px}
+/* 回転するハンドルの重ね描き。位置は元画像に合わせて調整可能 */
+.handle{position:absolute;left:50%;top:70%;width:17%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity .15s}
+.handle-disc{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 26%,#fff3d2,#d8b47e 43%,#987041 82%,#eed6a7);border:3px solid #c7a06c;box-shadow:0 2px 7px #4a243988,inset 0 1px 4px #fff7;display:grid;place-items:center}
+.handle-disc:before,.handle-disc:after{content:"";position:absolute;background:linear-gradient(90deg,#a67b48,#ffe6b4 48%,#ad7d4c);border:1px solid #b88d58;border-radius:9px;box-shadow:0 2px 4px #51342577}
+.handle-disc:before{width:76%;height:22%}.handle-disc:after{height:76%;width:22%}.handle-disc i{position:relative;width:25%;height:25%;background:#fff2d0;border-radius:50%;z-index:1;box-shadow:inset 0 0 3px #8d643f}
+.spinning .handle{opacity:1}.spinning .handle-disc{animation:turnHandle .68s linear infinite}@keyframes turnHandle{to{transform:rotate(360deg)}}
+.center{text-align:center}.stage-text{font-size:14px;color:#8b6870}
+.primary{background:linear-gradient(130deg,#6d2437,#a84961 58%,#72283e);color:white;border:1px solid #d3a57c;padding:15px 25px;border-radius:40px;font-weight:800;box-shadow:0 8px 19px #7a2d4130}
+.secondary{border:1px solid #dbc8b9;background:white;color:var(--burgundy);padding:11px 15px;border-radius:30px;font-weight:600}
+.controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:16px 0}
+.draw-picker{border:1px solid #e8d9d6;border-radius:24px;padding:14px 12px;margin:15px auto;max-width:440px;background:#fffdfb}
+.draw-picker p{text-align:center;margin:0 0 12px;font-size:16px;font-weight:700}
+.draw-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.draw-option{min-height:105px;border:0;border-radius:20px;background:#762b3e;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;font-weight:800;font-size:clamp(17px,4.5vw,23px);box-shadow:0 6px 13px #4d1d301a}
+.draw-option:nth-child(2){background:#9a6b77}.draw-option svg{width:29px;height:29px;stroke:#f7d9a3;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.draw-option:disabled{opacity:.6}
+label{display:block;font-size:13px;margin:12px 0 5px}input:not([type=checkbox]),select{display:block;width:100%;padding:12px;border:1px solid #dac9bd;border-radius:11px;background:#fff;color:var(--ink)}
+label.check{display:flex;align-items:center;gap:9px}input[type=checkbox]{width:21px;height:21px;accent-color:var(--burgundy)}
+.muted{color:#947f79;font-size:12px}.notice{background:#fff1cf;color:#83551f;padding:11px;border-radius:10px;text-align:center;font-weight:bold}
+#message{color:#a5354e;text-align:center;min-height:18px;font-size:13px}
+.reward-grid{display:grid;grid-template-columns:1fr;gap:13px;max-width:560px;margin:12px auto}.reward-grid.double{grid-template-columns:repeat(2,minmax(0,1fr))}
+.reward-item{border:1px solid #ead9c8;background:#fffaf4;border-radius:18px;padding:12px 7px;min-width:0;box-shadow:0 5px 15px #6a3b3112}
+.rewardimg{display:block;width:100%;height:auto;max-height:295px;object-fit:contain;border-radius:10px}.reward-grid.double .rewardimg{max-height:220px}
+.reward-name{font-size:clamp(17px,4.5vw,26px);color:#95682f;font-weight:800;overflow-wrap:anywhere;margin:9px 0 2px}
+.result-panel{position:relative;isolation:isolate;animation:reveal .48s both}@keyframes reveal{from{opacity:0;transform:scale(.87)}to{opacity:1;transform:scale(1)}}
+.spark{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:4}.spark .particle{position:absolute;left:50%;top:42%;width:var(--size);height:var(--size);color:#fffdf5;filter:drop-shadow(0 0 2px #b88446) drop-shadow(0 0 7px #cda977);opacity:0;animation:burst var(--dur) cubic-bezier(.15,.65,.25,1) forwards;animation-delay:var(--delay)}
+.spark .particle.gold{color:#f1d8a4;filter:drop-shadow(0 0 2px #a66b32) drop-shadow(0 0 9px #e5ba6a)}
+.spark .particle svg{width:100%;height:100%;display:block;fill:currentColor}
+@keyframes burst{0%{opacity:0;transform:translate(-50%,-50%) scale(.15)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.45)}65%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.85) rotate(var(--rot))}}
+.spark .flash{position:absolute;left:50%;top:42%;width:100px;height:100px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fffef1 0%,#f8dfad99 30%,transparent 70%);animation:flash .55s ease-out both}
+@keyframes flash{from{opacity:.95;scale:.5}to{opacity:0;scale:2.8}}
+.staff-panel{margin-top:80px;border-top:2px solid #d8bd95}.staff-panel h2{font-size:19px;color:var(--burgundy)}
+.staff-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pill{display:block;font-size:11px;word-break:break-all;color:#967c78}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px}.stat{padding:12px;background:#fff5eb;border-radius:12px;text-align:center;font-size:12px}.stat b{display:block;font-size:23px;color:var(--burgundy)}
+.log{width:100%;border-collapse:collapse;font-size:12px}.log th,.log td{padding:9px 5px;border-bottom:1px solid var(--line);text-align:left}
+@media(max-width:480px){.staff-grid{grid-template-columns:1fr}.card{padding:16px}.machine-wrap{max-width:335px}.draw-option{min-height:100px}}
+</style></head><body><main class="wrap">
+<header class="brand"><div class="logo">La suzuran</div><h1>お客様感謝ガチャ</h1><p>2026年、ありがとうの気持ちを込めて ♡</p></header>
+<section id="setup" class="card hidden"><h2>初回設定</h2><p>SupabaseのProject URLと公開用anon keyを入力してください。</p><label>Project URL<input id="url"></label><label>Publishable / anon key<input id="key"></label><p class="muted">service_roleなどの秘密鍵は入力しないでください。</p><button id="saveConfig" class="primary">設定を保存</button></section>
+<section id="login" class="card hidden"><h2>スタッフログイン</h2><label>メールアドレス<input id="email" type="email" autocomplete="username"></label><label>パスワード<input id="password" type="password" autocomplete="current-password"></label><div class="controls"><button id="signIn" class="primary">ログイン</button></div></section>
+<section id="app" class="hidden"><section class="card">
+<h2 id="publicTitle">2026年心から大感謝ガチャ！</h2><div id="testNotice" class="notice hidden">🧪 テスト中：当選券として使用できません</div>
+<div id="stage"><div class="machine-wrap"><img src="gacha-machine.webp" alt="ボルドーとシャンパンゴールドのガチャマシン" class="machine-image"><div class="handle" aria-hidden="true"><div class="handle-disc"><i></i></div></div></div>
+<div class="center"><p id="stageText" class="stage-text">今年の運試し、いってみよう！</p></div>
+<div id="drawPicker" class="draw-picker"><p>ガチャの回数を選んでね ♡</p><div class="draw-options">
+<button type="button" class="draw-option" data-count="1"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9C7 9 5 7 5 5a3 3 0 0 1 3-3c3 0 4 7 4 7Zm0 0c5 0 7-2 7-4a3 3 0 0 0-3-3c-3 0-4 7-4 7Z"/></svg><span>1回ガチャ</span></button>
+<button type="button" class="draw-option" data-count="2"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9C7 9 5 7 5 5a3 3 0 0 1 3-3c3 0 4 7 4 7Zm0 0c5 0 7-2 7-4a3 3 0 0 0-3-3c-3 0-4 7-4 7Z"/></svg><span>2連ガチャ</span></button>
+</div></div></div>
+<div id="result" class="center result-panel hidden"><h2 id="resultTitle">🎊 おめでとうございます！</h2><div id="rewardVisual" class="reward-grid"></div><div class="controls"><button id="finish" class="secondary">終了する</button></div><div class="spark" id="spark" aria-hidden="true"></div></div>
+<p id="message" role="alert"></p></section>
+<section class="card staff-panel"><h2>🔐 スタッフ管理</h2><p class="muted">この下の設定は、お客様に見せないで操作してください。</p>
+<div class="staff-grid"><div><label for="pool">ガチャの種類</label><select id="pool"><option value="new">新規（1〜3回目）</option><option value="repeat">リピーター</option></select></div><div><label for="staff">担当スタッフ</label><select id="staff"><option value="">担当者を選択</option><option value="まゆ🐾">まゆ🐾</option><option value="しるび🍭">しるび🍭</option><option value="らん🌺">らん🌺</option><option value="あづ🫐">あづ🫐</option></select></div></div>
+<label class="check"><input id="testMode" type="checkbox">🧪 テストモード（在庫・履歴に影響なし）</label><div class="controls"><button id="soundToggle" class="secondary" type="button">🔊 効果音 ON</button><button id="refresh" class="secondary">在庫を更新</button></div>
+<hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><h3>割引券の在庫（両店舗共通）</h3><div id="stats" class="stats"></div><h3>最近の当選履歴</h3><div style="overflow-x:auto"><table class="log"><thead><tr><th>日時</th><th>担当</th><th>種類</th><th>景品</th></tr></thead><tbody id="history"></tbody></table></div>
+<hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><span id="who" class="pill"></span><div class="controls"><button id="signOut" class="secondary">ログアウト</button></div>
+</section></section></main>
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
+const $=id=>document.getElementById(id),configKey='sucre-gacha-config-v1';
+let supabase=null,busy=false,channel=null,audioCtx=null;const config=JSON.parse(localStorage.getItem(configKey)||'null');
+const rewards={new:[['sweet','おかし2こ'],['100','¥100 OFF'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['1500','¥1,500 OFF']],repeat:[['sweet','おかし2こ'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['2000','¥2,000 OFF'],['5000','¥5,000 OFF']]};
+const images={new:{sweet:'400307BF-4DA8-4B38-B02E-BD5DBF7C6743.png',100:'8CBAC843-0858-4BEE-9574-7425D371882D.png',500:'68276E83-2800-4715-9D05-703FA9A69F92.png',1000:'951E4FE2-D530-4362-859A-8B1C45CE5963.png',1500:'367A5975-3CDF-46F3-947C-0F6D56CED4FC.png'},repeat:{sweet:'400307BF-4DA8-4B38-B02E-BD5DBF7C6743.png',500:'840B0435-A3DA-443E-9D07-CC15FA9017B1.png',1000:'9DD7F564-8C17-45E7-940B-2BDF96B4F14D.png',2000:'1ADD116A-0B95-4923-9513-9A6B9B6375D3.png',5000:'773DF744-E4C2-4ED0-BE0A-0E79E6B984DC.png'}};
+const titles={new:'2026年心から大感謝ガチャ！',repeat:'2026年も本当に大感謝ガチャ!!®️'};
+function view(name){['setup','login','app'].forEach(id=>$(id).classList.toggle('hidden',id!==name))}function msg(s){$('message').textContent=s}function updateTitle(){$('publicTitle').textContent=titles[$('pool').value]}
+function init(){if(new URLSearchParams(location.search).has('reset')){localStorage.removeItem(configKey);location.replace(location.pathname);return}if(!config?.url||!config?.key){view('setup');return}supabase=createClient(config.url,config.key);supabase.auth.onAuthStateChange((_event,session)=>{if(session)start(session);else view('login')});supabase.auth.getSession().then(({data})=>{if(data.session)start(data.session);else view('login')}).catch(e=>alert(e.message))}
+$('saveConfig').onclick=()=>{const c={url:$('url').value.trim(),key:$('key').value.trim()};if(!/^https:\/\//.test(c.url)||!c.key)return alert('URLと公開用キーを確認してください');localStorage.setItem(configKey,JSON.stringify(c));location.reload()};
+$('signIn').onclick=async()=>{const b=$('signIn');b.disabled=true;try{const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)alert('ログインできませんでした: '+error.message)}catch(e){alert('通信エラー: '+e.message)}finally{b.disabled=false}};
+$('signOut').onclick=async()=>{if(channel){await supabase.removeChannel(channel);channel=null}await supabase.auth.signOut()};
+async function start(session){view('app');$('who').textContent='ログイン中：'+session.user.email;updateTitle();await refresh();if(channel)await supabase.removeChannel(channel);channel=supabase.channel('inventory-live').on('postgres_changes',{event:'*',schema:'public',table:'inventory'},()=>refresh()).on('postgres_changes',{event:'INSERT',schema:'public',table:'draws'},()=>refresh()).subscribe()}
+const labels=pool=>Object.fromEntries(rewards[pool]||[]);
+async function refresh(){if(!supabase)return;const pool=$('pool').value;const [{data:inv,error:e1},{data:hist,error:e2}]=await Promise.all([supabase.from('inventory').select('pool,prize_id,remaining,initial_count').eq('pool',pool).neq('prize_id','sweet'),supabase.from('draws').select('created_at,pool,prize_id,staff_name').order('created_at',{ascending:false}).limit(15)]);if(e1||e2){msg('管理情報の取得に失敗しました: '+(e1||e2).message);return}$('stats').replaceChildren();(inv||[]).forEach(r=>{const d=document.createElement('div');d.className='stat';const s=document.createElement('span');s.textContent=labels(pool)[r.prize_id]||r.prize_id;const b=document.createElement('b');b.textContent=r.remaining;d.append(s,b);$('stats').append(d)});$('history').replaceChildren();(hist||[]).forEach(r=>{const tr=document.createElement('tr');const values=[new Date(r.created_at).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'}),r.staff_name||'旧履歴',r.pool==='new'?'新規':'リピーター',labels(r.pool)[r.prize_id]||r.prize_id];values.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});$('history').append(tr)})}
+$('pool').onchange=()=>{updateTitle();refresh()};$('refresh').onclick=refresh;$('testMode').onchange=()=>{const on=$('testMode').checked;$('testNotice').classList.toggle('hidden',!on);msg(on?'テスト中：在庫と履歴は変更されません。':'')};
+let soundOn=localStorage.getItem('sucre-gacha-sound')!=='off';function soundButton(){$('soundToggle').textContent=soundOn?'🔊 効果音 ON':'🔇 効果音 OFF'}soundButton();
+$('soundToggle').onclick=()=>{soundOn=!soundOn;localStorage.setItem('sucre-gacha-sound',soundOn?'on':'off');soundButton();if(soundOn){unlockAudio();notes([[880,0,.1],[1175,.12,.16]])}};
+function unlockAudio(){if(!soundOn)return;try{audioCtx||=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{})}catch(e){audioCtx=null}}
+function tone(f,t,d,v=.08,type='sine'){if(!soundOn||!audioCtx)return;try{const start=audioCtx.currentTime+t,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(.0001,start);g.gain.exponentialRampToValueAtTime(v,start+.012);g.gain.exponentialRampToValueAtTime(.0001,start+d);o.connect(g).connect(audioCtx.destination);o.start(start);o.stop(start+d+.03)}catch(e){}}
+function notes(seq){seq.forEach(([f,t,d])=>tone(f,t,d))}
+function spinSound(){unlockAudio();notes([[659,0,.1],[988,.1,.15]]);[523,659,784,659,880,784,988,784,1047,880,1175,988,1319,1047,1319,1568].forEach((f,i)=>tone(f,.25+i*.12,.12,.042))}
+function winSound(big){unlockAudio();notes(big?[[784,0,.14],[988,.13,.14],[1175,.26,.18],[1568,.43,.31],[1976,.59,.4]]:[[784,0,.12],[988,.13,.12],[1175,.26,.14],[1568,.42,.3]])}
+const star='<svg viewBox="0 0 24 24"><path d="M12 .8 14.7 9.3 23.2 12 14.7 14.7 12 23.2 9.3 14.7 .8 12 9.3 9.3Z"/></svg>',smallStar='<svg viewBox="0 0 24 24"><path d="m12 1 3.2 7.7L23 12l-7.8 3.3L12 23l-3.3-7.7L1 12l7.7-3.3Z"/></svg>',paw='<svg viewBox="0 0 30 30"><ellipse cx="7" cy="10" rx="3" ry="4"/><ellipse cx="14" cy="6" rx="3" ry="4"/><ellipse cx="22" cy="9" rx="3" ry="4"/><ellipse cx="27" cy="15" rx="2.5" ry="3.5"/><path d="M14 14c-4 0-5 5-8 7-2 3 0 6 3 6 2 0 4-2 6-2s4 2 6 2c4 0 5-4 2-7-3-2-4-6-9-6Z"/></svg>';
+function sparkle(){const box=$('spark');box.replaceChildren();const flash=document.createElement('span');flash.className='flash';box.append(flash);for(let i=0;i<54;i++){const p=document.createElement('span');p.className='particle'+(i%4===0?' gold':'');p.innerHTML=i%5===0?paw:i%3===0?smallStar:star;const a=Math.random()*Math.PI*2,dist=105+Math.random()*170;p.style.setProperty('--dx',Math.cos(a)*dist+'px');p.style.setProperty('--dy',Math.sin(a)*dist+'px');p.style.setProperty('--rot',Math.random()*260+'deg');p.style.setProperty('--size',(i%5===0?18:13)+Math.random()*12+'px');p.style.setProperty('--dur',(1.25+Math.random()*.6)+'s');p.style.setProperty('--delay',Math.random()*.12+'s');box.append(p)}}
+function showStage(){$('result').classList.add('hidden');$('stage').classList.remove('hidden','spinning');$('stageText').textContent='今年の運試し、いってみよう！';document.querySelectorAll('.draw-option').forEach(b=>b.disabled=false);msg('')}
+$('finish').onclick=()=>{showStage();$('staff').value='';window.scrollTo({top:0,behavior:'smooth'})};
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function testPrize(pool){const choices=rewards[pool].map(([id])=>id);return choices[Math.floor(Math.random()*choices.length)]}
+function addReward(pool,prize){const label=labels(pool)[prize]||prize,img=images[pool]?.[prize];const item=document.createElement('div');item.className='reward-item';const title=document.createElement('div');title.className='reward-name';title.textContent=label;
+if(img){const picture=document.createElement('img');picture.className='rewardimg';picture.alt=label;picture.loading='eager';picture.onerror=()=>{picture.remove();item.prepend(document.createTextNode('🎁'))};picture.src=img;item.append(picture)}else{const fallback=document.createElement('div');fallback.textContent='🎁';fallback.style.fontSize='56px';item.append(fallback)}item.append(title);$('rewardVisual').append(item)}
+async function draw(count){if(busy)return;const pool=$('pool').value,staff=$('staff').value,isTest=$('testMode').checked;
+if(!isTest&&!staff){alert('スタッフ管理欄で担当者を選んでください。');$('staff').scrollIntoView({behavior:'smooth',block:'center'});return}
+if(!confirm(isTest?'🧪 テストで'+count+'回抽選します。在庫・履歴は変わりません。':'ガチャを'+count+'回引きます。よろしいですか？'))return;
+busy=true;document.querySelectorAll('.draw-option').forEach(b=>b.disabled=true);$('pool').disabled=true;$('staff').disabled=true;$('testMode').disabled=true;msg('');$('stage').classList.add('spinning');$('stageText').textContent='ガチャガチャ…！';
+/* ユーザー操作中に音声を再開し、次の抽選でも使えるようにする */unlockAudio();spinSound();const started=performance.now();const prizes=[];let failure=null;
+try{for(let i=0;i<count;i++){if(isTest){prizes.push(testPrize(pool));continue}const requestId=crypto.randomUUID();let response;try{response=await supabase.rpc('draw_gacha',{p_pool:pool,p_store:'kamimaezu',p_request_id:requestId,p_staff_name:staff})}catch(e){response={error:e}}if(response.error||!response.data?.prize_id){failure=response.error?.message||'抽選結果がありません';break}prizes.push(response.data.prize_id)}}finally{await sleep(Math.max(0,2300-(performance.now()-started)));$('stage').classList.remove('spinning');$('pool').disabled=false;$('staff').disabled=false;$('testMode').disabled=false;busy=false}
+if(failure){$('stageText').textContent='スタッフに確認してください';msg('抽選処理を確認できませんでした。'+(prizes.length?'すでに'+prizes.length+'回分の抽選が記録された可能性があります。':'')+' 再抽選せず、管理者が履歴を確認してください。 '+failure);if(!isTest)refresh();return}
+$('rewardVisual').replaceChildren();$('rewardVisual').classList.toggle('double',count===2);prizes.forEach(prize=>addReward(pool,prize));const big=prizes.some(p=>p==='5000'||p==='1500');$('resultTitle').textContent=isTest?'🧪 テスト結果（当選券ではありません）':big?'🎉 大当たり！ 🎉':'🎊 おめでとうございます！';$('stage').classList.add('hidden');$('result').classList.remove('hidden');$('result').classList.remove('result-panel');void $('result').offsetWidth;$('result').classList.add('result-panel');sparkle();winSound(big);if(!isTest)refresh()}
+document.querySelectorAll('.draw-option').forEach(b=>b.addEventListener('click',()=>draw(Number(b.dataset.count))));init();
+</script></body></html>
