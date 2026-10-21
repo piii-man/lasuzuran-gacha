@@ -11,7 +11,7 @@ if(new URLSearchParams(location.search).has('reset')){localStorage.removeItem(co
 const config=JSON.parse(localStorage.getItem(configKey)||'null');
 const rewards={new:[['sweet','おかし2こ'],['100','¥100 OFF'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['1500','¥1,500 OFF']],repeat:[['sweet','おかし2こ'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['2000','¥2,000 OFF'],['5000','¥5,000 OFF']]};
 // Put image URLs here after uploading your approved artwork to Supabase Storage or other public HTTPS hosting.
-const images={new:{sweet:'',100:'',500:'',1000:'',1500:''},repeat:{sweet:'',1000:'',serum:'',2000:'',5000:''}};
+const images={new:{sweet:'',100:'https://piii-man.github.io/lasuzuran-gacha/8CBAC843-0858-4BEE-9574-7425D371882D.png',500:'',1000:'',1500:''},repeat:{sweet:'',1000:'',serum:'',2000:'',5000:''}};
 function view(name){['setup','login','app'].forEach(id=>$(id).classList.toggle('hidden',id!==name))}
 function msg(s){$('message').textContent=s}
 function init(){if(!config?.url||!config?.key){view('setup');return}supabase=createClient(config.url,config.key);supabase.auth.onAuthStateChange((_event,session)=>{if(session)start(session);else view('login')});supabase.auth.getSession().then(({data})=>{if(data.session)start(data.session);else view('login')}).catch(e=>alert(e.message))}
