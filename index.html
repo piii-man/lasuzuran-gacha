@@ -7,6 +7,7 @@
 <script type="module">
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 const $=id=>document.getElementById(id), configKey='sucre-gacha-config-v1';let supabase=null, busy=false,channel=null;
+if(new URLSearchParams(location.search).has('reset')){localStorage.removeItem(configKey);location.replace(location.pathname)}
 const config=JSON.parse(localStorage.getItem(configKey)||'null');
 const rewards={new:[['sweet','おかし2こ'],['100','¥100 OFF'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['1500','¥1,500 OFF']],repeat:[['sweet','おかし2こ'],['1000','¥1,000 OFF'],['serum','ラッシュアディクト'],['2000','¥2,000 OFF'],['5000','¥5,000 OFF']]};
 // Put image URLs here after uploading your approved artwork to Supabase Storage or other public HTTPS hosting.
