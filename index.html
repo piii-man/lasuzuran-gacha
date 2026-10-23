@@ -71,7 +71,7 @@ let busy=false,audioCtx=null,pollTimer=null;const config={url:'https://wgmsxauob
 const rewards={new:[['sweet','おかし2こ'],['100','¥100 OFF'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['1500','¥1,500 OFF']],repeat:[['sweet','おかし2こ'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['2000','¥2,000 OFF'],['5000','¥5,000 OFF']]};
 const images={new:{sweet:'400307BF-4DA8-4B38-B02E-BD5DBF7C6743.png',100:'8CBAC843-0858-4BEE-9574-7425D371882D.png',500:'68276E83-2800-4715-9D05-703FA9A69F92.png',1000:'951E4FE2-D530-4362-859A-8B1C45CE5963.png',1500:'367A5975-3CDF-46F3-947C-0F6D56CED4FC.png'},repeat:{sweet:'400307BF-4DA8-4B38-B02E-BD5DBF7C6743.png',500:'840B0435-A3DA-443E-9D07-CC15FA9017B1.png',1000:'9DD7F564-8C17-45E7-940B-2BDF96B4F14D.png',2000:'1ADD116A-0B95-4923-9513-9A6B9B6375D3.png',5000:'773DF744-E4C2-4ED0-BE0A-0E79E6B984DC.png'}};
 const titles={new:'2026年心から大感謝ガチャ！',repeat:'2026年も本当に大感謝ガチャ!!®️'};
-function view(name){['setup','login','app'].forEach(id=>$(id).classList.toggle('hidden',id!==name))}function msg(s){$('message').textContent=s}function updateTitle(){$('publicTitle').textContent=titles[$('pool').value]}
+function view(name){['login','app'].forEach(id=>$(id).classList.toggle('hidden',id!==name))}function msg(s){$('message').textContent=s}function updateTitle(){$('publicTitle').textContent=titles[$('pool').value]}
 async function api(action,params={}){
  const token=localStorage.getItem(tokenKey);
  const res=await fetch(config.url.replace(/\/$/,'')+'/functions/v1/gacha-passcode',{
