@@ -47,7 +47,7 @@ label.check{display:flex;align-items:center;gap:9px}input[type=checkbox]{width:2
 @media(max-width:480px){.staff-grid{grid-template-columns:1fr}.card{padding:16px}.machine-wrap{max-width:335px}.draw-option{min-height:100px}}
 </style></head><body><main class="wrap">
 <header class="brand"><div class="logo">La suzuran</div><p>2026年、ありがとうの気持ちを込めて ♡</p></header>
-<section id="setup" class="card hidden"><h2>初回設定</h2><p>SupabaseのProject URLと公開用anon keyを入力してください。</p><label>Project URL<input id="url"></label><label>Publishable / anon key<input id="key"></label><p class="muted">service_roleなどの秘密鍵は入力しないでください。</p><button id="saveConfig" class="primary">設定を保存</button></section>
+
 <section id="login" class="card hidden"><h2>6桁パスコード</h2><p class="muted">この端末では初回のみ入力してください。</p><label>パスコード<input id="passcode" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off"></label><div class="controls"><button id="signIn" class="primary">ログイン</button></div></section>
 <section id="app" class="hidden"><section class="card">
 <h2 id="publicTitle">2026年心から大感謝ガチャ！</h2><div id="testNotice" class="notice hidden">🧪 テスト中：当選券として使用できません</div>
@@ -67,7 +67,7 @@ label.check{display:flex;align-items:center;gap:9px}input[type=checkbox]{width:2
 </section></section></main>
 <script type="module">
 const $=id=>document.getElementById(id),configKey='sucre-gacha-config-v1',staffKey='lasuzuran-selected-staff-v1',tokenKey='lasuzuran-gacha-device-token-v1';
-let busy=false,audioCtx=null,pollTimer=null;const config=JSON.parse(localStorage.getItem(configKey)||'null');
+let busy=false,audioCtx=null,pollTimer=null;const config={url:'https://wgmsxauobeohyvkyidzj.supabase.co'};
 const rewards={new:[['sweet','おかし2こ'],['100','¥100 OFF'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['1500','¥1,500 OFF']],repeat:[['sweet','おかし2こ'],['500','¥500 OFF'],['1000','¥1,000 OFF'],['2000','¥2,000 OFF'],['5000','¥5,000 OFF']]};
 const images={new:{sweet:'400307BF-4DA8-4B38-B02E-BD5DBF7C6743.png',100:'8CBAC843-0858-4BEE-9574-7425D371882D.png',500:'68276E83-2800-4715-9D05-703FA9A69F92.png',1000:'951E4FE2-D530-4362-859A-8B1C45CE5963.png',1500:'367A5975-3CDF-46F3-947C-0F6D56CED4FC.png'},repeat:{sweet:'400307BF-4DA8-4B38-B02E-BD5DBF7C6743.png',500:'840B0435-A3DA-443E-9D07-CC15FA9017B1.png',1000:'9DD7F564-8C17-45E7-940B-2BDF96B4F14D.png',2000:'1ADD116A-0B95-4923-9513-9A6B9B6375D3.png',5000:'773DF744-E4C2-4ED0-BE0A-0E79E6B984DC.png'}};
 const titles={new:'2026年心から大感謝ガチャ！',repeat:'2026年も本当に大感謝ガチャ!!®️'};
@@ -75,7 +75,7 @@ function view(name){['setup','login','app'].forEach(id=>$(id).classList.toggle('
 async function api(action,params={}){
  const token=localStorage.getItem(tokenKey);
  const res=await fetch(config.url.replace(/\/$/,'')+'/functions/v1/gacha-passcode',{
-  method:'POST',headers:{'Content-Type':'application/json','apikey':config.key},
+  method:'POST',headers:{'Content-Type':'application/json'},
   body:JSON.stringify({action,token,...params})
  });
  const json=await res.json().catch(()=>({}));
@@ -93,18 +93,13 @@ async function init(){
  if(new URLSearchParams(location.search).has('reset')){
   localStorage.removeItem(configKey);localStorage.removeItem(tokenKey);location.replace(location.pathname);return;
  }
- if(!config?.url||!config?.key){view('setup');return}
+ if(!config?.url){view('login');return}
  if(localStorage.getItem(tokenKey)){
   try{await api('check');await start();return}
   catch(e){console.warn('認証を確認できませんでした',e);if(!localStorage.getItem(tokenKey))view('login');else {alert('通信を確認してください: '+e.message);view('login')}return}
  }
  view('login');
 }
-$('saveConfig').onclick=()=>{
- const c={url:$('url').value.trim(),key:$('key').value.trim()};
- if(!/^https:\/\//.test(c.url)||!c.key)return alert('URLと公開用キーを確認してください');
- localStorage.setItem(configKey,JSON.stringify(c));location.reload();
-};
 $('signIn').onclick=async()=>{
  const b=$('signIn');b.disabled=true;
  try{
